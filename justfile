@@ -1,24 +1,27 @@
-# ESP32 Rust Template (std)
-# Default target - change this to switch between ESP32 variants
-# Options: esp32, esp32s2, esp32s3, esp32c2, esp32c3, esp32c6, esp32h2
-TARGET := "esp32s3"
+# ESP32 Rust Development Environment
+# This template provides the Nix environment and convenience commands.
+# Run `just init <name>` to generate the Rust project using the official esp-rs template.
 
 default:
     @just --list
 
-# One-time setup: install esp toolchain for configured target
-setup:
-    cargo install espup cargo-espflash espflash ldproxy
-    espup install --targets {{ TARGET }}
+# Initialize project using official esp-rs template
+init name:
+    cargo generate esp-rs/esp-idf-template cargo --name {{name}}
+    cp -r {{name}}/{Cargo.toml,.cargo,build.rs,src,sdkconfig.defaults,rust-toolchain.toml} ./
+    rm -rf {{name}}
     @echo ""
-    @echo "Setup complete. Restart shell: exit, then 'nix develop'"
+    @echo "Project initialized! Next steps:"
+    @echo "  1. Run 'just setup' to install the ESP toolchain"
+    @echo "  2. Run 'just build' to compile"
+    @echo "  3. Run 'just flash' to flash and monitor"
 
-# Setup all targets (Xtensa + RISC-V)
-setup-all:
+# Install ESP toolchain (run after init)
+setup:
     cargo install espup cargo-espflash espflash ldproxy
     espup install
     @echo ""
-    @echo "Setup complete. Restart shell: exit, then 'nix develop'"
+    @echo "Setup complete. Restart your shell to pick up the new environment."
 
 # Build firmware (debug)
 build:
@@ -44,7 +47,7 @@ monitor:
 clean:
     cargo clean
 
-# Clean everything including ESP-IDF cache (use after version changes)
+# Clean everything including ESP-IDF cache
 clean-all:
     cargo clean
     rm -rf .embuild
@@ -52,7 +55,3 @@ clean-all:
 # Show binary size info
 size:
     cargo size --release -- -A
-
-# Generate new project from esp-idf-template
-new-project:
-    cargo generate esp-rs/esp-idf-template

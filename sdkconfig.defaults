@@ -1,4 +1,0 @@
-# ESP-IDF SDK Configuration Defaults
-# Rust requires larger stack than C defaults
-
-CONFIG_ESP_MAIN_TASK_STACK_SIZE=8000
