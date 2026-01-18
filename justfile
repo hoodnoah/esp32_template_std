@@ -23,6 +23,7 @@ setup:
 
 new:
     cargo generate esp-rs/esp-idf-template --name main
+    cp -r main/.cargo .cargo
 
 build:
     cargo build --release
