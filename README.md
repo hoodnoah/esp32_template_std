@@ -4,12 +4,23 @@ A Nix-based development environment for ESP32 Rust projects. Uses the official [
 
 ## Quick Start
 
+### Set up your justfile.
+1. Set your `TARGET` variable to the esp32 board you are targeting.
+2. OPTIONAL: Set your `DEV_TARGET` variable to the host you are developing on.
+  a. This is to be used for testing libraries locally.
+3. OPTIONAL: Set your `LIB_NAME` variable to the name of your library crate, if you have made one. 
+  a. This is where you would develop functionality which is not directly dependent upon the esp32.
+     It can be tested locally, and imported by your main executable. Thus you should be careful not to 
+     use dependencies which cannot be reasonably expected on the esp32 platform.
+
+NOTE: if you intend to use a library, you must add said library to the top-level Cargo.toml so it gets picked up by your workspace.
+
+# Run setup commands
 ```bash
 nix develop                  # Enter development shell
-just init my_project         # Generate Rust project (interactive)
 just setup                   # Install ESP toolchain (one-time)
-# Restart shell to pick up toolchain
-just build                   # Compile
+just new                     # Generate your main Rust executable project (interactive: select same target as your TARGET)
+just build                   # Compile. NOTE: may fail. If so, delete .embuild, try again.
 just flash                   # Flash to device and monitor
 ```
 
@@ -29,32 +40,11 @@ The actual Rust project files (`Cargo.toml`, `src/`, `.cargo/`, etc.) are genera
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `just init <name>` | Generate Rust project using esp-rs template |
-| `just setup` | Install ESP toolchain |
-| `just build` | Debug build |
-| `just build-release` | Release build (size-optimized) |
-| `just flash` | Flash and monitor |
-| `just flash-only` | Flash without monitor |
-| `just monitor` | Serial monitor only |
-| `just clean` | Remove build artifacts |
-| `just clean-all` | Remove build artifacts and ESP-IDF cache |
-| `just size` | Show binary size breakdown |
-
-## Configuration
-
-### Target Selection
-
-When running `just init`, you'll be prompted to select your target chip (ESP32, ESP32-S3, ESP32-C3, etc.). The template handles the configuration automatically.
+Run `just` to list commands
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` for compile-time configuration (WiFi credentials, etc.):
-
-```bash
-cp .env.example .env
-```
+Copy `.env.example` to `main/.env` for compile-time configuration (WiFi credentials, etc.):
 
 ### Flash Partitions
 
@@ -68,5 +58,3 @@ cp .env.example .env
 Then create new projects via:
 - GitHub UI: Click **Use this template**
 - CLI: `gh repo create my-project --template USERNAME/esp32_template --clone`
-
-After creating, run `just init <name>` to generate the Rust project.
