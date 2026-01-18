@@ -44,6 +44,11 @@ monitor:
 clean:
     cargo clean
 
+# Clean everything including ESP-IDF cache (use after version changes)
+clean-all:
+    cargo clean
+    rm -rf .embuild
+
 # Show binary size info
 size:
     cargo size --release -- -A
