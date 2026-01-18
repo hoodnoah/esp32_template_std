@@ -1,3 +1,4 @@
+
 {
   description = "ESP32 Rust development - system deps via Nix, toolchain via espup";
 
@@ -41,6 +42,8 @@
             # Convenience
             just
             cargo-generate
+            nil
+            nixd
           ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
             udev
             libusb1
@@ -55,7 +58,7 @@
             if [ -f "$HOME/export-esp.sh" ]; then
               source "$HOME/export-esp.sh"
             fi
-            
+
             # Ensure git can use system credential helpers
             export GIT_TERMINAL_PROMPT=1
           '';

@@ -1,20 +1,18 @@
-# Build artifacts
+# Rust
 /target/
+Cargo.lock
+flycheck*
+
+# ESP-IDF build artifacts
 /.embuild/
+/managed_components/
+/dependencies.lock
+sdkconfig
+sdkconfig.old
 
-# Cargo lock (optional - keep for applications, ignore for libraries)
-# Cargo.lock
-
-# Environment files with secrets
-.env
-
-# Nix
-result
-.direnv/
-
-# Editor
-.idea/
-.vscode/
+# IDE
+/.idea/
+/.vscode/
 *.swp
 *.swo
 *~
@@ -22,5 +20,9 @@ result
 # macOS
 .DS_Store
 
-# Debug
-*.dSYM/
+# direnv
+.direnv/
+.envrc.local
+
+# env
+.env
