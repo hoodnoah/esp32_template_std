@@ -1,29 +1,53 @@
-# ESP32 Rust
+# ESP32 Rust Template (std)
+# Default target - change this to switch between ESP32 variants
+# Options: esp32, esp32s2, esp32s3, esp32c2, esp32c3, esp32c6, esp32h2
+TARGET := "esp32s3"
 
 default:
     @just --list
 
-# One-time setup
+# One-time setup: install esp toolchain for configured target
 setup:
-    cargo install espup
-    cargo install cargo-espflash espflash
-    espup install --targets "esp32c2"
-    @echo "Restart shell: exit, then nix develop"
+    cargo install espup cargo-espflash espflash ldproxy
+    espup install --targets {{ TARGET }}
+    @echo ""
+    @echo "Setup complete. Restart shell: exit, then 'nix develop'"
 
-new:
-    cargo generate esp-rs/esp-idf-template
+# Setup all targets (Xtensa + RISC-V)
+setup-all:
+    cargo install espup cargo-espflash espflash ldproxy
+    espup install
+    @echo ""
+    @echo "Setup complete. Restart shell: exit, then 'nix develop'"
 
+# Build firmware (debug)
 build:
+    cargo build
+
+# Build firmware (release, size-optimized)
+build-release:
     cargo build --release
 
+# Flash and monitor
 flash:
-    cargo espflash flash --release --monitor
+    cargo espflash flash --release --monitor --partition-table partitions.csv
 
+# Flash only (no monitor)
+flash-only:
+    cargo espflash flash --release --partition-table partitions.csv
+
+# Serial monitor
 monitor:
     cargo espflash monitor
 
+# Clean build artifacts
 clean:
     cargo clean
 
-test-lib:
-    cargo test -p woodstove_logic --target aarch64-apple-darwin
+# Show binary size info
+size:
+    cargo size --release -- -A
+
+# Generate new project from esp-idf-template
+new-project:
+    cargo generate esp-rs/esp-idf-template

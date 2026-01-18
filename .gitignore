@@ -1,0 +1,26 @@
+# Build artifacts
+/target/
+/.embuild/
+
+# Cargo lock (optional - keep for applications, ignore for libraries)
+# Cargo.lock
+
+# Environment files with secrets
+.env
+
+# Nix
+result
+.direnv/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Debug
+*.dSYM/
