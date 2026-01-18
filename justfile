@@ -2,7 +2,14 @@
 # Set your target chip before running any commands
 # Options: esp32, esp32s2, esp32s3, esp32c2, esp32c3, esp32c6, esp32h2
 
-TARGET := "esp32c3"
+TARGET := ""
+
+# Libs
+# Set your development target for libraries to be tested as part of this project.
+# Options: aarch64-apple-darwin
+
+DEV_TARGET := ""
+LIB_NAME := ""
 
 default:
     @just --list
@@ -30,4 +37,4 @@ clean:
     cargo clean
 
 test-lib:
-    cargo test -p woodstove_logic --target aarch64-apple-darwin
+    cargo test -p "{{ LIB_NAME }}" --target "{{ DEV_TARGET }}"
